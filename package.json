@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "description": "API microservice for FalconText",
+  "main": "app.js",
+  "author": "andrei <andrei@macrobyte.ro>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
