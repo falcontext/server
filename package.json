@@ -6,11 +6,13 @@
   "author": "andrei <andrei@macrobyte.ro>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "winston": "^3.2.1"
   },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon src/app.js",
+    "start:prod": "node src/app.js"
   }
 }

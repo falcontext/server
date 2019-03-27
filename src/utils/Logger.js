@@ -14,12 +14,12 @@ module.exports = createLogger({
 			format: 'YYYY-MM-DD HH:mm:ss',
 		}),
 		format.printf(
-			info => `${info.timestamp} ${info.level}: ${info.message}`,
+			info => `${info.timestamp} - [${appInfo.appName}][${appInfo.appVersion}][${info.level}]: - ${info.message}`,
 		),
 	),
 	transports: [
 		new transports.Console({
-			level: 'debug',
+			level: process.env.LOG_LEVEL,
 			format: format.combine(
 				format.colorize(),
 			),
