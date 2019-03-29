@@ -1,9 +1,6 @@
 version: 2
 jobs:
   api-build:
-    filters:
-      tags:
-        only: api_deploy_*
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -17,5 +14,7 @@ workflows:
     jobs:
       - api-build:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: api_deploy_*
