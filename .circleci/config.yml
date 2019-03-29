@@ -17,4 +17,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: api_deploy_*
+              only: /^api_v[0-9]+(\.[0-9]+)*$/
