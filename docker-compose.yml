@@ -1,0 +1,7 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    image: 'api:falcontext'
+    ports: 
+      - '6000:8080'
