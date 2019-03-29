@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Publish Docker image
           command: |
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push andreichirita92/$IMAGE_NAME:$TAG
 
 
