@@ -1,15 +1,13 @@
-workflows: 
-  version: 2
-  deploy-api:
-    jobs:
-      api-build&deploy:
-        build:
-          filters:
-            tags:
-              only: api_deploy_*
-          docker:
-            - image: docker:17.05.0-ce-git
-          steps:
-            - checkout
-            - setup_remote_docker
-            - run: docker build -t falcontext_api:0.1 ./api/
+version: 2
+jobs:
+  api-build&deploy:
+    build:
+      filters:
+        tags:
+          only: api_deploy_*
+      docker:
+        - image: docker:17.05.0-ce-git
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run: docker build -t falcontext_api:0.1 ./api/
