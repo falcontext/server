@@ -20,7 +20,7 @@ jobs:
           name: Publish Docker image
           command: |
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-            docker push andreichirita92/$IMAGE_NAME:$TAG
+            docker push andreichirita92/{$IMAGE_NAME}:{$TAG}
 
 
 workflows:
