@@ -16,16 +16,19 @@ jobs:
             echo 'export IMAGE_NAME="falcontext""' >> $BASH_ENV
       - run:
           name: Debug env variables
+          shell: "/bin/bash -eo pipefail"
           command: |
             echo $0
             echo ${TAG}
             echo ${IMAGE_NAME}
       - run: 
           name: Build Docker image 
+          shell: "/bin/bash -eo pipefail"
           command: |
             docker build -t andreichirita92/$IMAGE_NAME:$TAG ./api/
       - run:
           name: Publish Docker image
+          shell: "/bin/bash -eo pipefail"
           command: |
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push andreichirita92/${IMAGE_NAME}:${TAG}
