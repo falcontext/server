@@ -1,15 +1,19 @@
 version: 2
 jobs:
   api-build:
-    environment:
-      TAG: API-0.1.$CIRCLE_BUILD_NUM
-      IMAGE_NAME: falcontext
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout
       - setup_remote_docker:
           docke_layer_caching: true
+      - run: |
+          apk update && apk add bash
+      - run:
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            echo 'export TAG="API-0.1.$CIRCLE_BUILD_NUM"' >> $BASH_ENV
+            echo 'export IMAGE_NAME="falcontext""' >> $BASH_ENV
       - run:
           name: Debug env variables
           command: |
