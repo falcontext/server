@@ -4,3 +4,5 @@ services:
     image: 'andreichirita92/falcontext:{{API_TAG}}'
     ports: 
       - '6000:8080'
+    volumes:
+      - ./logs/api:../data/log/api
