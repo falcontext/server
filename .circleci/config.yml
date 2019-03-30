@@ -40,8 +40,8 @@ jobs:
           shell: "/bin/bash -eo pipefail"
           command: |
             sed 's/{{TAG}}/${TAG}/' docker-compose-template.yml > docker-compose.yml
-            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 docker-compose.yml andrei@api.falcontext.com
-            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 api/deploy.sh andrei@api.falcontext.com/deploy_scripts/api_deploy.sh
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 docker-compose.yml andrei@api.falcontext.com:docker-compose.yml
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 api/deploy.sh andrei@api.falcontext.com:deploy_scripts/api_deploy.sh
             ssh -o StrictHostKeyChecking=no andrei@api.falcontext.com "/bin/bash chmod 755 deploy_scripts/api_deploy.sh"
             ssh -o StrictHostKeyChecking=no andrei@api.falcontext.com "/bin/bash ./deploy_scripts/api_deploy.sh"
 
