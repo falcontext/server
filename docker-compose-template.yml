@@ -1,0 +1,6 @@
+version: '3'
+services:
+  API:
+    image: 'andreichirita92/falcontext:{{API_TAG}}'
+    ports: 
+      - '6000:8080'
