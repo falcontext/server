@@ -5,4 +5,4 @@ services:
     ports: 
       - '6000:8080'
     volumes:
-      - ./logs/api:../data/log/api
+      - ./logs/api:/home/node/data/log/api
