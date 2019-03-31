@@ -1,9 +1,13 @@
 const env = require('dotenv').config();
 const express = require('express');
 const validator = require('express-validator');
-const routes = require('./routes/RoutesDispatcher');
-const logger = require('./utils/Logger');
 const appInfo = require('./utils/AppInfo');
+const config = {
+    appInfo: appInfo
+}
+const libs = require('libs')(config);
+const logger = libs.logger;
+const routes = require('./routes/RoutesDispatcher')(libs);
 
 if (env.error) {
     logger.error(`error parsing .env file ${env.error}`);    
@@ -11,6 +15,7 @@ if (env.error) {
 } else {
     logger.info(`.env file loaded`);
 }
+
 
 const app = express();
 app.use(express.json());

@@ -2,16 +2,14 @@
 
 const express = require('express');
 const userRoutes = require('./UserRoutes');
-const logger = require('./middleware/LoggingRequestMiddleware');
+const appInfo = require('../utils/AppInfo');
 
-
-const router = express.Router();
-
-router.use(logger);
-router.get('/', (req, res) => {
-	res.send('working');
-});
-
-router.use('/user/', userRoutes);
-
-module.exports = router;
+module.exports = function(lib) {
+	const router = express.Router();
+	router.use(lib.loggingRequestMiddleware)
+	router.get('/', (req, res) => {
+		res.send('working');
+	});
+	router.use('/user/', userRoutes);
+	return router
+};
