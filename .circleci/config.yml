@@ -28,7 +28,7 @@ jobs:
           name: Build Docker image 
           shell: "/bin/bash -eo pipefail"
           command: |
-            docker build -t andreichirita92/$IMAGE_NAME:$TAG ./api/
+            docker build -t andreichirita92/$IMAGE_NAME:$TAG -f ./api/Dockerfile .
       - run:
           name: Publish Docker image
           shell: "/bin/bash -eo pipefail"
