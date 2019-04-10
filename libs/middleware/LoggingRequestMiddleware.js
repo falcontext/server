@@ -1,7 +1,5 @@
 /* jslint node es6 */
 
-
-
 module.exports = function (appInfo) {
 	const logger = require('../logger/Logger')(appInfo);
 	return function middlewareLogger(req, res, next) {

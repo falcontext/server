@@ -1,4 +1,9 @@
 api/node_modules/
+api/yarn-error.log
+auth/node_modules/
+auth/yarn-error.log
+*/node_modules/
+*/yarn-error.log
 data/
 docker-compose.yml
 logs/
