@@ -1,14 +1,13 @@
 {
-    "name": "libs",
-    "version": "0.0.1",
-    "description": "libs for FalconText",
-    "main": "index.js",
-    "private": "true",
-    "author": "andrei <andrei@macrobyte.ro>",
-    "license": "MIT",
-    "dependencies": {
-      "winston": "^3.2.1"
-    }
-    
+  "name": "libs",
+  "version": "0.0.1",
+  "description": "libs for FalconText",
+  "main": "index.js",
+  "private": "true",
+  "author": "andrei <andrei@macrobyte.ro>",
+  "license": "MIT",
+  "dependencies": {
+    "winston": "^3.2.1"
   }
+}
   
