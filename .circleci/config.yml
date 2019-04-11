@@ -18,12 +18,19 @@ jobs:
             echo 'export TAG="API-v0.1.$CIRCLE_BUILD_NUM"' >> $BASH_ENV
             echo 'export IMAGE_NAME="falcontext"' >> $BASH_ENV
       - run:
-          name: Debug env variables
+          name: Setup microservice env vars
           shell: "/bin/bash -eo pipefail"
           command: |
-            echo $0
-            echo ${TAG}
-            echo ${IMAGE_NAME}
+            command: |
+              cp .env .env_bk
+              sed "s/{{DB_HOST}}/${DB_HOST}/" .env_bk > .env
+              rm .env_bk
+              cp .env .env_bk
+              sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" .env_bk > .env
+              rm .env_bk
+              cp .env .env_bk
+              sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" .env_bk > .env
+              rm .env_bk
       - run: 
           name: Build Docker image 
           shell: "/bin/bash -eo pipefail"
@@ -45,6 +52,58 @@ jobs:
             ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "chmod 755 deploy_scripts/api_deploy.sh"
             ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "./deploy_scripts/api_deploy.sh"
 
+
+  pos-build:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docke_layer_caching: true
+      - add_ssh_keys:
+          fingerprints:
+            - "19:46:00:17:a8:5a:e8:a7:0f:30:af:4f:7c:b3:3e:f3"
+      - run: |
+          apk update && apk add bash
+      - run:
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            echo 'export TAG="POS-v0.1.$CIRCLE_BUILD_NUM"' >> $BASH_ENV
+            echo 'export IMAGE_NAME="falcontext"' >> $BASH_ENV
+      - run:
+          name: Setup microservice env vars
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            command: |
+              cp .env .env_bk
+              sed "s/{{DB_HOST}}/${DB_HOST}/" .env_bk > .env
+              rm .env_bk
+              cp .env .env_bk
+              sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" .env_bk > .env
+              rm .env_bk
+              cp .env .env_bk
+              sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" .env_bk > .env
+              rm .env_bk
+      - run: 
+          name: Build Docker image 
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            docker build -t andreichirita92/$IMAGE_NAME:$TAG -f ./pos/Dockerfile .
+      - run:
+          name: Publish Docker image
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push andreichirita92/${IMAGE_NAME}:${TAG}
+      - run:
+          name: Deploy
+          shell: "/bin/bash -eo pipefail"
+          command: |
+            sed "s/{{POS_TAG}}/${TAG}/" docker-compose-template.yml > docker-compose.yml
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 docker-compose.yml andrei@api.falcontext.com:docker-compose.yml
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 api/deploy.sh andrei@api.falcontext.com:deploy_scripts/api_deploy.sh
+            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "chmod 755 deploy_scripts/api_deploy.sh"
+            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "./deploy_scripts/api_deploy.sh"
 workflows:
   version: 2
   api_build&deploy:
@@ -55,4 +114,11 @@ workflows:
               ignore: /.*/
             tags:
               only: /^api_v[0-9]+(\.[0-9]+)*$/
+          context: falconText
+      - pos-build:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^pos_v[0-9]+(\.[0-9]+)*$/
           context: falconText

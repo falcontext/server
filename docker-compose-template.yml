@@ -6,3 +6,9 @@ services:
       - '6000:8080'
     volumes:
       - ./logs/api:/home/node/data/log/api
+  POS:
+    image: 'andreichirita92/falcontext:{{POS_TAG}}'
+    ports:
+      - '6001:8080'
+    columes:
+      - ./logs/pos:/home/node/data/log/pos
