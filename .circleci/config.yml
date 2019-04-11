@@ -21,16 +21,15 @@ jobs:
           name: Setup microservice env vars
           shell: "/bin/bash -eo pipefail"
           command: |
-            command: |
-              cp api/.env api/.env_bk
-              sed "s/{{DB_HOST}}/${DB_HOST}/" api/.env_bk > api/.env
-              rm api/.env_bk
-              cp api/.env api/.env_bk
-              sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" api/.env_bk > api/.env
-              rm api/.env_bk
-              cp api/.env api/.env_bk
-              sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" api/.env_bk > api/.env
-              rm api/.env_bk
+            cp api/.env api/.env_bk
+            sed "s/{{DB_HOST}}/${DB_HOST}/" api/.env_bk > api/.env
+            rm api/.env_bk
+            cp api/.env api/.env_bk
+            sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" api/.env_bk > api/.env
+            rm api/.env_bk
+            cp api/.env api/.env_bk
+            sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" api/.env_bk > api/.env
+            rm api/.env_bk
       - run: 
           name: Build Docker image 
           shell: "/bin/bash -eo pipefail"
@@ -74,16 +73,15 @@ jobs:
           name: Setup microservice env vars
           shell: "/bin/bash -eo pipefail"
           command: |
-            command: |
-              cp pos/.env pos/.env_bk
-              sed "s/{{DB_HOST}}/${DB_HOST}/" pos/.env_bk > pos/.env
-              rm pos/.env_bk
-              cp pos/.env pos/.env_bk
-              sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" pos/.env_bk > pos/.env
-              rm pos/.env_bk
-              cp pos/.env pos/.env_bk
-              sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" pos/.env_bk > pos/.env
-              rm pos/.env_bk
+            cp pos/.env pos/.env_bk
+            sed "s/{{DB_HOST}}/${DB_HOST}/" pos/.env_bk > pos/.env
+            rm pos/.env_bk
+            cp pos/.env pos/.env_bk
+            sed "s/{{DB_USERNAME}}/${DB_USERNAME}/" pos/.env_bk > pos/.env
+            rm pos/.env_bk
+            cp pos/.env pos/.env_bk
+            sed "s/{{DB_PASSWORD}}/${DB_PASSWORD}/" pos/.env_bk > pos/.env
+            rm pos/.env_bk
       - run: 
           name: Build Docker image 
           shell: "/bin/bash -eo pipefail"
