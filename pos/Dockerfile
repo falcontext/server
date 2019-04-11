@@ -8,6 +8,7 @@ WORKDIR /home/node/libs
 RUN yarn install
 WORKDIR /home/node/app
 USER node
+RUN yarn add ../libs
 RUN yarn install
 COPY --chown=node:node ./pos .
 EXPOSE 8080
