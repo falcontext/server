@@ -10,5 +10,5 @@ services:
     image: 'andreichirita92/falcontext:{{POS_TAG}}'
     ports:
       - '6001:8080'
-    columes:
+    volumes:
       - ./logs/pos:/home/node/data/log/pos

@@ -99,9 +99,9 @@ jobs:
           command: |
             sed "s/{{POS_TAG}}/${TAG}/" docker-compose-template.yml > docker-compose.yml
             scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 docker-compose.yml andrei@api.falcontext.com:docker-compose.yml
-            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 api/deploy.sh andrei@api.falcontext.com:deploy_scripts/api_deploy.sh
-            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "chmod 755 deploy_scripts/api_deploy.sh"
-            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "./deploy_scripts/api_deploy.sh"
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22000 pos/deploy.sh andrei@api.falcontext.com:deploy_scripts/pos_deploy.sh
+            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "chmod 755 deploy_scripts/pos_deploy.sh"
+            ssh -p 22000 -o StrictHostKeyChecking=no andrei@api.falcontext.com "./deploy_scripts/pos_deploy.sh"
 workflows:
   version: 2
   api_build&deploy:
