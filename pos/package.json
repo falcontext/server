@@ -1,0 +1,18 @@
+{
+  "name": "pos",
+  "version": "0.0.1",
+  "description": "pos service for FalconText project",
+  "main": "app.js",
+  "author": "Andrei",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "libs": "../libs"
+  },
+  "scripts": {
+    "start": "nodemon src/app.js",
+    "start:prod": "node src/app.js"
+  }
+}
