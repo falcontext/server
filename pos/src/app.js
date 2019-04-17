@@ -7,6 +7,7 @@ const config = {
 const libs = require('libs')(config);
 const logger = libs.logger;
 const routes = require('./routes/RoutesDispatcher')(libs);
+const bodyParser = require('body-parser');
 
 if (env.error) {
     logger.error(`error parsing .env file ${env.error}`);    
@@ -15,13 +16,14 @@ if (env.error) {
     logger.info(`.env file loaded`);
 }
 
-
 const app = express();
-app.use(express.json());
+
+app.use(bodyParser.text());
+app.use(bodyParser.json());
 app.use(routes);
 
 logger.info(`starting auth microservice`);
 const server = app.listen(appInfo.port, '0.0.0.0', () => {
     const port = server.address().port;
-    logger.info(`listening on port: ${port}`);2
+    logger.info(`listening on port: ${port}`);
 });

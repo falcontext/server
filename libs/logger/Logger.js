@@ -4,8 +4,6 @@ const path = require('path');
 
 module.exports = function(appInfo) {
 	const logDir = process.env.LOG_DIR
-	console.log(logDir);
-	console.log(appInfo.appName);
 	const filename = path.join(logDir, `${appInfo.appName}_.log`.toString());
 	return createLogger({
 		level: 'debug',
