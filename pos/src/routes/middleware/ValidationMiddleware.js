@@ -1,31 +1,36 @@
-const check = require('express-validator/check').check;
-
+const check = require("express-validator/check").check;
+const accountManager = require("../../db/AccountManager");
 function validatorUserRegister() {
-	return [
-		check('username').matches(/^[0-9a-zA-Z]{4..}$/).withMessage('Invalid username'),
-		check('firstName').matches(/^[a-zA-Z]$/).withMessage('Invalid firstName'),
-		check('lastName').matches(/^[a-zA-Z]$/).withMessage('Invalid lastName'),
-		check('password').matches(/^{6..}$/).withMessage('Password to short. Minimum 6 characters'),
-		check('email').matches()
-	];
+  return [
+    check("email")
+      .trim()
+      .isEmail()
+      .withMessage("Invalid email address")
+      .custom(value => {
+        value = value.trim();
+        return accountManager
+          .getAccountByEmail(value)
+          .then(users => {
+            if (users.length > 0) {
+              return false;
+            } else {
+              return true;
+            }
+          })
+          .catch(e => {
+            return false;
+          });
+      })
+      .withMessage("Email already registered"),
+    check("password")
+      .trim()
+      .isLength({ min: 4 })
+      .withMessage("Password to short. Minimum length is 4")
+      .matches(/\d/)
+      .withMessage("Password must contains at least one number"),
+    check("firstName").trim().exists().not().isEmpty().withMessage("First name is mandatory"),
+    check("lastName").trim().exists().not().isEmpty().withMessage("Last name is mandatory")
+  ];
 }
 
-function checkRegisterValidationResult(req, res, next) {
-	const result = validatorUserRegister(req);
-	if (result.length === 0) {
-		return next();
-	}
-	res.status(400).json({errors: result});
-	return '';
-}
-
-function checkValidationResult(req, res, next) {
-	const result = validatorUserRegister(req);
-	if (result.length === 0) {
-		return next();
-	}
-	res.status(400).json({ errors: result});
-	return '';
-}
-
-module.exports = { validatorUserRegister, checkValidationResult };
+module.exports = { validatorUserRegister };

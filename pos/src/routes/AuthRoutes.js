@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const validator = require('./middleware/ValidationMiddleware');
+const { check, validationResult } = require('express-validator/check');
 const accountManager = require('../db/AccountManager');
 
 const router = express.Router();
@@ -11,7 +12,11 @@ router.get('/', (req, res) => {
 	res.send("success");
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', validator.validatorUserRegister(), (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.mapped() });
+	}
 	accountManager.register(req.body).then(result => {
 		res.status(200).json();
 	}).catch(e => {
@@ -19,7 +24,7 @@ router.post('/register', (req, res) => {
 	})
 });
 
-router.post('/login', validator.checkValidationResult, (req, res) => {
+router.post('/login', (req, res) => {
 	res.send('login');
 });
 
