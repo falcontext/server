@@ -5,6 +5,8 @@ class Libs {
         this.appInfo = config.appInfo
         this.logger = require('./logger/Logger')(this.appInfo);
         this.loggingRequestMiddleware = require('./middleware/LoggingRequestMiddleware')(this.appInfo);
+        this.authorizeRequestMiddleware = require('./middleware/AuthorizeRequestMiddleware');
+        this.jwtUtils = require('./utils/JWTUtils');
     }
 }
 

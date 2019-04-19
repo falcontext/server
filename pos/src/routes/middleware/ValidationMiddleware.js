@@ -33,4 +33,33 @@ function validatorUserRegister() {
   ];
 }
 
-module.exports = { validatorUserRegister };
+function validatorUserAuth() {
+  return [
+    check("email")
+    .trim()
+    .isEmail()
+    .withMessage("Invalid email address")
+    .custom(value => {
+      value = value.trim();
+      return accountManager
+      .getAccountByEmail(value)
+      .then(users => {
+        if (users.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch( e=> {
+        return false;
+      });
+    })
+    .withMessage("Email not registered"),
+    check("password")
+    .trim()
+    .isLength({min: 4})
+    .withMessage("Invalid password")
+  ]
+}
+
+module.exports = { validatorUserRegister, validatorUserAuth };

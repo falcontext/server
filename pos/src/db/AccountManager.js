@@ -43,16 +43,45 @@ class AccountManager {
           ctx
             .saveProfile(id, account)
             .then(res => {
-              ctx.auditRegister(id, account, true).catch(e => {});
+              ctx.audit(id, account, "REGISTER", true).catch(e => {});
               resolve();
             })
             .catch(e => {
-              ctx.auditRegister(id, account, false).catch(e => {});
+              ctx.audit(id, account, "REGISTER", false).catch(e => {});
               ctx.rollbackRegister(id);
               rejected(e);
             });
         })
         .catch(e => {
+          rejected(e);
+        });
+    });
+  }
+
+  auth(account) {
+    const ctx = this;
+    return new Promise(function(resolve, rejected) {
+      ctx
+        .checkUserPass(account)
+        .then(result => {
+          ctx.getAccountIdByEmail(account.email).then(res => {
+            if (res.length > 0) {
+              ctx.audit(res[0].id, account, "AUTH", true).catch(e => {});
+            } else {
+              ctx.audit(0, account, "AUTH", true).catch(e => {});
+            }
+          });
+          resolve();
+        })
+        .catch(e => {
+          ctx.getAccountIdByEmail(account.email).then(res => {
+            if (res.length > 0) {
+              ctx.audit(res[0].id, account, "AUTH", false).catch(e => {});
+            } else {
+              ctx.audit(0, account, "AUTH", false).catch(e => {});
+            }
+          }); 
+          console.log(e);
           rejected(e);
         });
     });
@@ -67,7 +96,7 @@ class AccountManager {
       const hash = hashPassword(account.password);
       const vals = [account.email, hash];
       pool
-      .connect()
+        .connect()
         .then(client => {
           client
             .query(query, vals)
@@ -122,13 +151,13 @@ class AccountManager {
     });
   }
 
-  auditRegister(id, account, success) {
+  audit(id, account, action, success) {
     return new Promise(function(resolve, rejected) {
-      var status = "REGISTER";
+      var status = action;
       if (success == true) {
-        status = "REGISTER_SUCCESS";
+        status = action + "_SUCCESS";
       } else {
-        status = "REGISTER_FAILED";
+        status = action + "_FAILED";
       }
       const query =
         'INSERT INTO "users"."audit"(account_id, action, source_ip, created_at, last_modified) ' +
@@ -191,6 +220,36 @@ class AccountManager {
     });
   }
 
+  getAccountIdByEmail(email) {
+    return new Promise(function(resolve, rejected) {
+      const query = 'SELECT id FROM "users"."account" WHERE email = $1';
+      const vals = [email];
+
+      pool
+        .connect()
+        .then(client => {
+          client
+            .query(query, vals)
+            .then(res => {
+              logger.info("Query account by email");
+              client.release();
+              resolve(res.rows);
+            })
+            .catch(e => {
+              logger.error("Error getting account by email");
+              console.log(e.stack);
+              client.release();
+              rejected(e);
+            });
+        })
+        .catch(e => {
+          logger.error("Error pooling client");
+          console.log(e.stack);
+          rejected(e);
+        });
+    });
+  }
+
   getAccountByEmail(email) {
     return new Promise(function(resolve, rejected) {
       const query = 'SELECT email FROM "users"."account" WHERE email = $1';
@@ -214,7 +273,44 @@ class AccountManager {
             });
         })
         .catch(e => {
-          loggler.error("Error pooling client");
+          logger.error("Error pooling client");
+          console.log(e.stack);
+          rejected(e);
+        });
+    });
+  }
+
+  checkUserPass(account) {
+    let ctx = this;
+    return new Promise(function(resolve, rejected) {
+      const email = account.email;
+      const password = ctx.hashPassword(account.password);
+      const query =
+        'SELECT email, password FROM "users"."account" where email = $1 and password = $2';
+      const vals = [email, password];
+      pool
+        .connect()
+        .then(client => {
+          client
+            .query(query, vals)
+            .then(res => {
+              logger.info("Query account by email / password");
+              client.release();
+              if (res.rows.length > 0) {
+                resolve();
+              } else {
+                rejected("email or password incorrect");
+              }
+            })
+            .catch(e => {
+              logger.error("Error getting account by email / password");
+              console.log(e.stack);
+              client.release();
+              rejected(e);
+            });
+        })
+        .catch(e => {
+          logger.error("Error pooling client");
           console.log(e.stack);
           rejected(e);
         });

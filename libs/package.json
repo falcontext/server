@@ -7,7 +7,7 @@
   "author": "andrei <andrei@macrobyte.ro>",
   "license": "MIT",
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
     "winston": "^3.2.1"
   }
 }
-  
