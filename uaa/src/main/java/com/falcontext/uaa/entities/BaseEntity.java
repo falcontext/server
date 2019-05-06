@@ -8,6 +8,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import javax.persistence.*;
 import java.util.Date;
 
+@MappedSuperclass
 public class BaseEntity {
 
     @Basic(optional = false)

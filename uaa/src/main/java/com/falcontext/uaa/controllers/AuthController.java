@@ -26,7 +26,6 @@ public class AuthController {
     @PostMapping("/register")
     public void register(@RequestBody AccountDTO account) {
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        System.out.println(account.toJSON());
         User user = account.transform();
         usersRepository.save(user);
 //        List<User> users = usersRepository.findAll();
