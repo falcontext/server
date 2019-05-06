@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "profile", schema="users")
-public class Profile {
+public class Profile extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,14 +51,4 @@ public class Profile {
         this.user = user;
     }
 
-    public String toJSON() {
-        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
-        ObjectMapper mapper = builder.build();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
 }

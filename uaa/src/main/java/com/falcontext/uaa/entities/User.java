@@ -1,13 +1,16 @@
 package com.falcontext.uaa.entities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "account", schema="users")
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -45,14 +48,4 @@ public class User {
         this.profile = profile;
     }
 
-    public String toJSON() {
-        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
-        ObjectMapper mapper = builder.build();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
 }

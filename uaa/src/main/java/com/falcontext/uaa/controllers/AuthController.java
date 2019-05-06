@@ -1,5 +1,6 @@
 package com.falcontext.uaa.controllers;
 
+import com.falcontext.uaa.dto.AccountDTO;
 import com.falcontext.uaa.entities.User;
 import com.falcontext.uaa.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        List<User> users = usersRepository.findAll();
-        for (User mUser:users) {
-            System.out.println(mUser.toJSON());
-        }
+    public void register(@RequestBody AccountDTO account) {
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        System.out.println(account.toJSON());
+        User user = account.transform();
+        usersRepository.save(user);
+//        List<User> users = usersRepository.findAll();
+//        for (User mUser:users) {
+//            System.out.println(mUser.toJSON());
+//        }
     }
 
 }
