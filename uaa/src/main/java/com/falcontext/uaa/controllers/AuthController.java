@@ -3,6 +3,8 @@ package com.falcontext.uaa.controllers;
 import com.falcontext.uaa.dto.AccountDTO;
 import com.falcontext.uaa.entities.User;
 import com.falcontext.uaa.repositories.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ public class AuthController {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UsersRepository usersRepository;
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     AuthController(BCryptPasswordEncoder bCryptPasswordEncoder, UsersRepository usersRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -28,10 +31,7 @@ public class AuthController {
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         User user = account.transform();
         usersRepository.save(user);
-//        List<User> users = usersRepository.findAll();
-//        for (User mUser:users) {
-//            System.out.println(mUser.toJSON());
-//        }
+        logger.info("saved user: " + user.toJSON());
     }
 
 }

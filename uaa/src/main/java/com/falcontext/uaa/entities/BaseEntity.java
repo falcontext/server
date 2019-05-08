@@ -15,7 +15,7 @@ public class BaseEntity {
     @CreationTimestamp
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date createdAt = new Date(); // initialize created date
+    protected Date createdAt = new Date();
 
     @UpdateTimestamp
     @Column(name = "last_modified")
