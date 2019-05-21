@@ -1,1 +1,12 @@
-/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/uaa/App.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/entities/User.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/dto/AccountDTO.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/configs/SecurityConfig.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/App.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/controllers/AuthController.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/repositories/UsersRepository.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/entities/Profile.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/configs/Security.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/dto/BaseDTO.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/configs/AuthServerConfig.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/entities/BaseEntity.java
+/Users/andreichirita/Work/Falcontext/backend/uaa/src/main/java/com/falcontext/uaa/entities/errors/GeneralError.java

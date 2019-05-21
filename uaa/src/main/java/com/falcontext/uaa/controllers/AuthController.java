@@ -5,9 +5,11 @@ import com.falcontext.uaa.entities.User;
 import com.falcontext.uaa.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sun.security.util.Password;
 
 import java.util.List;
 import java.util.Set;
@@ -15,23 +17,21 @@ import java.util.Set;
 @RestController
 public class AuthController {
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
     private UsersRepository usersRepository;
+
     @Autowired
-    AuthController(BCryptPasswordEncoder bCryptPasswordEncoder, UsersRepository usersRepository) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    AuthController(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.usersRepository = usersRepository;
     }
 
     @PostMapping("/register")
     public void register(@RequestBody AccountDTO account) {
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         User user = account.transform();
+        user.setRole("ROLE_USER");
         usersRepository.save(user);
-//        List<User> users = usersRepository.findAll();
-//        for (User mUser:users) {
-//            System.out.println(mUser.toJSON());
-//        }
     }
 
 }

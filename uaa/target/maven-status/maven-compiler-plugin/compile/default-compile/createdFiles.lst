@@ -1,1 +1,11 @@
+com/falcontext/uaa/dto/BaseDTO.class
+com/falcontext/uaa/configs/Security.class
 com/falcontext/uaa/App.class
+com/falcontext/uaa/dto/AccountDTO.class
+com/falcontext/uaa/repositories/UsersRepository.class
+com/falcontext/uaa/configs/SecurityConfig.class
+com/falcontext/uaa/configs/AuthServerConfig.class
+com/falcontext/uaa/entities/User.class
+com/falcontext/uaa/entities/BaseEntity.class
+com/falcontext/uaa/entities/Profile.class
+com/falcontext/uaa/controllers/AuthController.class

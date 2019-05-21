@@ -1,46 +1,69 @@
 package com.falcontext.uaa.configs;
 
+import com.falcontext.uaa.entities.User;
+import com.falcontext.uaa.errors.CustomAccessDeniedHandler;
 import com.falcontext.uaa.errors.CustomAuthenticationEntryPoint;
+import com.falcontext.uaa.services.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
         private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-        private final UserDetailsService userDetailsService;
+//        private final UserDetailsService userDetailsService;
 
-        public ServerSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, @Qualifier("userService")
-                UserDetailsService userDetailsService) {
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
+        public BCryptPasswordEncoder bCryptPasswordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
+        @Autowired
+        private AccountService accountService;
+
+        public ServerSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
                 this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
-                this.userDetailsService = userDetailsService;
         }
-
-        @Bean
-        public DaoAuthenticationProvider authenticationProvider() {
-                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-                provider.setPasswordEncoder(passwordEncoder());
-                provider.setUserDetailsService(userDetailsService);
-                return provider;
-        }
+//
+//        @Bean
+//        public DaoAuthenticationProvider authenticationProvider() {
+//                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//                provider.setPasswordEncoder(passwordEncoder());
+//                provider.setUserDetailsService(accountService);
+//                return provider;
+//        }
 
         @Bean
         public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
+                String idForEncode = "bcrypt";
+                Map<String, PasswordEncoder> encoderMap = new HashMap<>();
+                encoderMap.put(idForEncode, new BCryptPasswordEncoder());
+                return new DelegatingPasswordEncoder(idForEncode, encoderMap);
         }
 
         @Bean
@@ -52,15 +75,28 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
                 http
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .and()
+                        .csrf().disable()
                         .authorizeRequests()
-                        .antMatchers("/api/signin/**").permitAll()
-                        .antMatchers("/api/glee/**").hasAnyAuthority("ADMIN", "USER")
-                        .antMatchers("/api/users/**").hasAuthority("ADMIN")
-                        .antMatchers("/api/**").authenticated()
+                        .antMatchers("/register**").permitAll()
                         .anyRequest().authenticated()
-                        .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
+//                        .antMatchers("/api/glee/**").hasAnyAuthority("ADMIN", "USER")
+//                        .antMatchers("/api/users/**").hasAuthority("ADMIN")
+//                        .antMatchers("/api/**").authenticated()
+
+
+                        .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler())
+                        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ;
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+                auth.userDetailsService(accountService)
+                        .passwordEncoder(bCryptPasswordEncoder());
+//                        .and()
+//                        .inMemoryAuthentication();
+//                        .withUser("falcontext_client").password(passwordEncoder.encode("client"))
+//                        .roles("USER");
         }
 
 }
